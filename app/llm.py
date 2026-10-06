@@ -14,14 +14,19 @@ class LLMService:
         )
 
     async def generate(self, prompt: str) -> str:
-        response = await self.client.chat.completions.create(
+        response = await self.client.responses.create(
             model=os.environ["LLM_MODEL"],
-            messages=[
+            input=[
                 {
                     "role": "user",
                     "content": prompt,
                 }
             ],
         )
-
-        return response.choices[0].message.content or ""
+        print("---Input Tokens Details---")
+        print(response.usage.input_tokens)
+        print(response.usage.input_tokens_details)
+        print("---Output Tokens Details---")
+        print(response.usage.output_tokens)
+        print(response.usage.output_tokens_details)
+        return response.output_text or ""

@@ -6,9 +6,6 @@ class SearchAgent:
     def __init__(self, search_service: SearchService) -> None:
         self.search_service = search_service
 
-    async def run(self, state: ResearchState) -> ResearchState:
+    async def run(self, state: ResearchState) -> dict:
         results = await self.search_service.search(state.query)
-
-        state.search_results = results
-
-        return state
+        return {"search_results": results}
