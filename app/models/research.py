@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from pydantic import BaseModel, Field
 
 
@@ -11,7 +10,11 @@ class SearchResult(BaseModel):
     published_date: datetime | None = None
     source_domain: str
 
+class Summary(BaseModel):
+    text: str
+    source_ids: list[str] = Field(default_factory=list)
 
 class ResearchState(BaseModel):
     query: str
     search_results: list[SearchResult] = Field(default_factory=list)
+    summary: Summary | None = None
