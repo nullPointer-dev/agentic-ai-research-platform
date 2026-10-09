@@ -18,8 +18,19 @@ class Summary(BaseModel):
 class Draft(BaseModel):
     text: str
 
+class VerificationIssue(BaseModel):
+    category: str
+    description: str
+    source_ids: list[str] = Field(default_factory=list)
+
+class VerificationResult(BaseModel):
+    passed: bool
+    issues: list[VerificationIssue] = Field(default_factory=list)
+    feedback: str = ""
+
 class ResearchState(BaseModel):
     query: str
     search_results: list[SearchResult] = Field(default_factory=list)
     summary: Summary | None = None
     draft: Draft | None = None
+    verification: VerificationResult | None = None  
