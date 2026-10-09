@@ -49,9 +49,17 @@ Return ONLY valid JSON in this exact format:
 }}
 """.strip()
 
-        response = await self.llm_service.generate(prompt)
-
-        data = json.loads(response)
+        response = await self.llm_service.generate(
+            prompt,
+            response_format={"type": "json_object"},
+        )
+        try:
+            data = json.loads(response)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "Summarization model returned invalid JSON. "
+                f"Response: {response[:200]!r}"
+            ) from exc
         summary = Summary.model_validate(data)
 
         valid_source_ids = {
