@@ -1,5 +1,7 @@
 import pytest
 
+from app.agents.write import WriteAgent
+from app.models.research import Draft
 from app.agents.search import SearchAgent
 from app.graph.research import build_research_graph
 from app.models.research import ResearchState, SearchResult, Summary
@@ -28,9 +30,19 @@ class FakeSummarizeAgent:
             )
         }
 
+class FakeWriteAgent:
+    async def run(self, state: ResearchState) -> dict:
+        assert state.summary is not None
+
+        return {
+            "draft": Draft(
+                text="CRISPR is a genome-editing technology. [S1]"
+            )
+        }
+
 @pytest.mark.anyio
 async def test_research_graph():
-    graph = build_research_graph(FakeSearchAgent(), FakeSummarizeAgent())
+    graph = build_research_graph(FakeSearchAgent(), FakeSummarizeAgent(), FakeWriteAgent())
     initial_state = ResearchState(query="What is CRISPR?")
     result = await graph.ainvoke(initial_state)
     print(type(result))
@@ -41,3 +53,4 @@ async def test_research_graph():
     assert result["search_results"][0].title == "Test Research"
     assert result["summary"].text == "This is a test summary."
     assert result["summary"].source_ids == ["S1"]
+    assert result["draft"].text == "CRISPR is a genome-editing technology. [S1]"
