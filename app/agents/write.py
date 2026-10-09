@@ -41,4 +41,10 @@ class WriteAgent:
         if not draft.text:
             raise ValueError("LLM returned an empty draft")
 
+        if draft.text.strip().lower() == "user safety: safe":
+            raise ValueError("LLM returned a safety message instead of a draft")
+
+        if len(draft.text.split()) < 30:
+            raise ValueError("LLM returned an incomplete draft")
+
         return {"draft": draft}
