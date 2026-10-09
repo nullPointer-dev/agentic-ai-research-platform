@@ -5,18 +5,23 @@ from app.models.research import ResearchState, Summary
 
 
 class FakeLLMService:
-    def __init__(self):
+    def __init__(self, response=None):
         self.received_prompt = None
         self.call_count = 0
+        self.response = response or (
+            "## CRISPR\n\n"
+            "CRISPR-Cas9 is a genome-editing technology. [S1] "
+            "It uses a guide RNA to direct the Cas9 enzyme to a "
+            "specific DNA sequence. The enzyme cuts the target DNA, "
+            "allowing researchers to modify genetic material. "
+            "This technology is used in biomedical research and "
+            "the study of gene function."
+        )
 
     async def generate(self, prompt: str) -> str:
         self.received_prompt = prompt
         self.call_count += 1
-
-        return (
-            "## CRISPR\n\n"
-            "CRISPR-Cas9 is a genome-editing technology. [S1]"
-        )
+        return self.response
 
 
 @pytest.mark.anyio
@@ -49,4 +54,20 @@ async def test_write_agent_requires_summary():
     state = ResearchState(query="What is CRISPR?")
 
     with pytest.raises(ValueError, match="without a summary"):
+        await agent.run(state)
+
+@pytest.mark.anyio
+async def test_write_agent_rejects_safety_message():
+    llm = FakeLLMService("User Safety: safe")
+    agent = WriteAgent(llm)
+
+    state = ResearchState(
+        query="What is CRISPR?",
+        summary=Summary(
+            text="CRISPR-Cas9 is a genome-editing technology.",
+            source_ids=["S1"],
+        ),
+    )
+
+    with pytest.raises(ValueError, match="safety message"):
         await agent.run(state)

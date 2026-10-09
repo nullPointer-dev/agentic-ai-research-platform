@@ -6,7 +6,7 @@ class FakeLLMService:
     def __init__(self):
         self.received_prompt = None
 
-    async def generate(self, prompt: str) -> str:
+    async def generate(self, prompt: str, response_format=None) -> str:
         self.received_prompt = prompt
 
         return """
