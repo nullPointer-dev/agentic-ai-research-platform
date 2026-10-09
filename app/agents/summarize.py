@@ -6,9 +6,9 @@ from app.models.research import ResearchState, Summary, SearchResult
 def build_evidence(results: list[SearchResult]) -> str:
     sections = []
 
-    for index, result in enumerate(results, start=1):
+    for result in results:
         sections.append(
-            f"[S{index}]\n"
+            f"[{result.id}]\n"
             f"Title: {result.title}\n"
             f"Source: {result.source_domain}\n"
             f"URL: {result.url}\n"
@@ -55,11 +55,11 @@ Return ONLY valid JSON in this exact format:
         summary = Summary.model_validate(data)
 
         valid_source_ids = {
-            f"S{index}"
-            for index in range(1, len(state.search_results) + 1)
+            result.id
+            for result in state.search_results
         }
 
         if not set(summary.source_ids).issubset(valid_source_ids):
             raise ValueError("Summary contains an invalid source ID")
-
+        
         return {"summary": summary}

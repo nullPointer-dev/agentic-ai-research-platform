@@ -19,6 +19,7 @@ class FakeLLMService:
 def test_build_evidence():
     results = [
         SearchResult(
+            id="S1",
             title="First Article",
             url="https://example.com/first",
             content="First article content.",
@@ -26,6 +27,7 @@ def test_build_evidence():
             source_domain="example.com",
         ),
         SearchResult(
+            id="S2",
             title="Second Article",
             url="https://example.com/second",
             content="Second article content.",
@@ -60,6 +62,7 @@ async def test_summarize_agent():
         query="What is CRISPR?",
         search_results=[
             SearchResult(
+                id="S1",
                 title="First Article",
                 url="https://example.com/first",
                 content="CRISPR is a genome-editing technology.",
@@ -67,6 +70,7 @@ async def test_summarize_agent():
                 source_domain="example.com",
             ),
             SearchResult(
+                id="S2",
                 title="Second Article",
                 url="https://example.com/second",
                 content="CRISPR can target specific DNA sequences.",

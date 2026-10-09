@@ -11,6 +11,7 @@ class FakeSearchService:
 
         return [
             SearchResult(
+                id="S1",
                 title="Test Article",
                 url="https://example.com/article",
                 content="Test content",
@@ -32,6 +33,7 @@ async def test_search_agent():
     result = await agent.run(state)
     assert search_service.received_query == "test query"
     assert len(result["search_results"]) == 1
+    assert result["search_results"][0].id == "S1"
     assert result["search_results"][0].title == "Test Article"
     assert result["search_results"][0].url == "https://example.com/article"
     assert result["search_results"][0].content == "Test content"

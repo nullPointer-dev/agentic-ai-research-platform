@@ -9,6 +9,7 @@ class FakeSearchAgent:
     async def run(self, state: ResearchState) -> ResearchState:
         state.search_results = [
             SearchResult(
+                id="S1",
                 title="Test Research",
                 url="https://example.com/research",
                 content="This is test research content.",

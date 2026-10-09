@@ -14,6 +14,7 @@ async def test_summarize_agent_with_llm():
         query="What is CRISPR?",
         search_results=[
             SearchResult(
+                id="S1",
                 title="CRISPR Overview",
                 url="https://example.com/crispr",
                 content=(
@@ -24,6 +25,7 @@ async def test_summarize_agent_with_llm():
                 source_domain="example.com",
             ),
             SearchResult(
+                id="S2",
                 title="CRISPR Mechanism",
                 url="https://example.com/mechanism",
                 content=(

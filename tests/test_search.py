@@ -9,12 +9,14 @@ async def test_search():
     tavily_response = {
         "results": [
             {
+                "id": "S1",
                 "title": "Example Article",
                 "url": "https://example.com/article",
                 "content": "This is example content.",
                 "score": 0.91,
             },
             {
+                "id": "S2",
                 "title": "Another Article",
                 "url": "https://example.org/research",
                 "content": "This is more research content.",

@@ -18,11 +18,12 @@ class SearchService:
         )
         return [
             SearchResult(
+                id=f"S{index}",
                 title=result["title"],
                 url=result["url"],
                 content=result["content"],
                 score=result["score"],
                 published_date=result.get("published_date"),
                 source_domain=urlparse(result["url"]).netloc,
-            ) for result in response["results"]
+            ) for index, result in enumerate(response["results"], start=1)
         ]

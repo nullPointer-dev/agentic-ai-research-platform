@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 
 
 class SearchResult(BaseModel):
+    id: str
     title: str
     url: str
     content: str
